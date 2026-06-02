@@ -1,4 +1,4 @@
-# Created at 2026-06-01T13:53:39.354
+# Created at 2026-06-02T11:15:40.022
 Boot Manifest-JAR contains absolute paths in classpath 'D:\ngampus\666\Software Testing\week_14-15\JTKLearn-cucumber\target\test-classes'
 Hint: <argLine>-Djdk.net.URLClassPath.disableClassPathURLCheck=true</argLine>
 'other' has different root

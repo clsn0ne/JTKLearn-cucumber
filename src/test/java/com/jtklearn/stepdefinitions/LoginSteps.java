@@ -33,7 +33,7 @@ public class LoginSteps {
     public void verifyDashboardPage() {
         dashboardPage = new DashboardPage(driver);
         try {
-            Thread.sleep(3000);
+            Thread.sleep(1000);
         } catch (InterruptedException e) {}
         String currentUrl = driver.getCurrentUrl();
         System.out.println("Current URL setelah login: " + currentUrl);

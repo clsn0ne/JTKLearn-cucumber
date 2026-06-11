@@ -20,11 +20,11 @@ public class LogoutSteps {
     public void userIsLoggedIn() {
         driver.get("https://polban-space.cloudias79.com/jtk-learn/");
         loginPage = new LoginPage(driver);
-        loginPage.enterEmail("admin@example.com");
-        loginPage.enterPassword("admin");
+        loginPage.enterEmail("ratna@example.com");
+        loginPage.enterPassword("ratna");
         loginPage.clickLoginButton();
 
-        try { Thread.sleep(3000); } catch (InterruptedException e) {}
+        try { Thread.sleep(1000); } catch (InterruptedException e) {}
         String currentUrl = driver.getCurrentUrl();
         System.out.println("URL setelah login di LogoutSteps: " + currentUrl);
         Assertions.assertTrue(
@@ -32,6 +32,37 @@ public class LogoutSteps {
             "Gagal login, URL tidak sesuai: " + currentUrl
         );
         dashboardPage = new DashboardPage(driver);
+    }
+
+    @Given("Pengguna sudah login")
+    public void penggunaSudahLogin() {
+        userIsLoggedIn();
+    }
+
+    @Given("Pengguna berada di halaman dashboard")
+    public void penggunaDiDashboard() {
+        // ensure dashboardPage is initialized and URL contains dashboard/home/beranda
+        try { Thread.sleep(1000); } catch (InterruptedException e) {}
+        String currentUrl = driver.getCurrentUrl();
+        if (!(currentUrl.contains("beranda") || currentUrl.contains("home") || currentUrl.contains("dashboard"))) {
+            throw new AssertionError("Pengguna tidak berada di halaman dashboard: " + currentUrl);
+        }
+        dashboardPage = new DashboardPage(driver);
+    }
+
+    @When("Klik menu akun di navbar")
+    public void klikMenuAkunDiNavbar() {
+        clickProfileMenu();
+    }
+
+    @When("Klik tombol Logout")
+    public void klikTombolLogout() {
+        clickLogoutButton();
+    }
+
+    @Then("Sistem mengakhiri sesi dan menampilkan kembali halaman login")
+    public void sistemAkhiriSesiDanTampilkanLogin() {
+        verifyRedirectToLoginPage();
     }
 
     @When("Saya mengklik menu profile")
@@ -46,7 +77,7 @@ public class LogoutSteps {
 
     @Then("Saya akan diarahkan kembali ke halaman login")
     public void verifyRedirectToLoginPage() {
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
         By emailField = By.cssSelector("input[placeholder='Masukkan email']");
         By passwordField = By.cssSelector("input[placeholder='Masukan kata sandi']");
 

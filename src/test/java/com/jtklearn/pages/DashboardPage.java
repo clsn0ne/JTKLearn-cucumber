@@ -2,31 +2,23 @@ package com.jtklearn.pages;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.support.PageFactory;
-import org.openqa.selenium.support.ui.WebDriverWait;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import java.time.Duration;
 
-public class DashboardPage {
-    WebDriver driver;
-    WebDriverWait wait;
-
+public class DashboardPage extends BasePage {
     private final By userDropdownTrigger = By.cssSelector("li.nav-name.dropdown > a.nav-link");
-
     private final By logoutButton = By.cssSelector("button.dropdown-button");
 
     public DashboardPage(WebDriver driver) {
-        this.driver = driver;
-        this.wait = new WebDriverWait(driver, Duration.ofSeconds(20));
-        PageFactory.initElements(driver, this);
+        super(driver);
+        // dashboard may need a longer wait for some elements
+        this.wait = new org.openqa.selenium.support.ui.WebDriverWait(driver, java.time.Duration.ofSeconds(20));
     }
 
     public void openUserDropdown() {
-        wait.until(ExpectedConditions.elementToBeClickable(userDropdownTrigger)).click();
-        wait.until(ExpectedConditions.visibilityOfElementLocated(logoutButton));
+        click(userDropdownTrigger);
+        waitForVisibility(logoutButton);
     }
 
     public void clickLogoutButton() {
-        wait.until(ExpectedConditions.elementToBeClickable(logoutButton)).click();
+        click(logoutButton);
     }
 }

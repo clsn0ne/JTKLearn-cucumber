@@ -1,7 +1,11 @@
-com\jtklearn\stepdefinitions\LoginSteps.class
 com\jtklearn\pages\DashboardPage.class
+com\jtklearn\pages\LogoutPage.class
+com\jtklearn\pages\BasePage.class
+com\jtklearn\stepdefinitions\QuizSteps.class
+com\jtklearn\stepdefinitions\LoginSteps.class
 com\jtklearn\utils\DriverManager.class
 com\jtklearn\runners\TestRunner.class
+com\jtklearn\pages\QuizPage.class
 com\jtklearn\pages\LoginPage.class
 com\jtklearn\stepdefinitions\LogoutSteps.class
-com\jtklearn\pages\LogoutPage.class
+com\jtklearn\pages\CoursePage.class

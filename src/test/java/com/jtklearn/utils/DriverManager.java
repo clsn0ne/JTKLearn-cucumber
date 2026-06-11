@@ -11,12 +11,13 @@ public class DriverManager {
         String chromeBinary = System.getenv("CHROME_BINARY");
         if (chromeBinary != null && !chromeBinary.isEmpty()) {
             options.setBinary(chromeBinary);
-            WebDriverManager.chromedriver().driverVersion("148.0.7778.217").setup();
+            // Use WebDriverManager online to resolve compatible driver
+            WebDriverManager.chromedriver().setup();
         } else {
             String braveDefault = "C:\\Program Files\\BraveSoftware\\Brave-Browser\\Application\\brave.exe";
             if (new java.io.File(braveDefault).exists()) {
                 options.setBinary(braveDefault);
-                WebDriverManager.chromedriver().driverVersion("148.0.7778.217").setup();
+                WebDriverManager.chromedriver().setup();
             } else {
                 WebDriverManager.chromedriver().setup();
             }

@@ -4,8 +4,9 @@ Feature: Logout Functionality
   Sehingga akun saya tidak digunakan oleh orang lain
 
   @logout_success
-  Scenario: Logout dari sistem
-    Given Saya sudah login ke JTKLearn
-    When Saya mengklik menu profile
-    And Saya mengklik tombol logout
-    Then Saya akan diarahkan kembali ke halaman login
+  Scenario: Logout berhasil saat pengguna menekan tombol logout
+    Given Pengguna sudah login
+    And Pengguna berada di halaman dashboard
+    When Klik menu akun di navbar
+    And Klik tombol Logout
+    Then Sistem mengakhiri sesi dan menampilkan kembali halaman login

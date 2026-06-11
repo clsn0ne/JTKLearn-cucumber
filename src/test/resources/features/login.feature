@@ -6,6 +6,6 @@ Feature: Login Functionality
   @login_success
   Scenario: Login dengan kredensial yang valid
     Given Saya membuka halaman login JTKLearn
-    When Saya memasukkan username "admin@example.com" dan password "admin"
+    When Saya memasukkan username "ratna@example.com" dan password "ratna"
     And Saya mengklik tombol login
     Then Saya akan diarahkan ke halaman dashboard

@@ -3,9 +3,11 @@ package com.jtklearn.stepdefinitions;
 import io.cucumber.java.en.*;
 import org.junit.jupiter.api.Assertions;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import com.jtklearn.pages.LoginPage;
 import com.jtklearn.pages.DashboardPage;
 import com.jtklearn.utils.DriverManager;
+import java.time.Duration;
 
 public class LoginSteps {
     WebDriver driver = DriverManager.getDriver();
@@ -32,13 +34,17 @@ public class LoginSteps {
     @Then("Saya akan diarahkan ke halaman dashboard")
     public void verifyDashboardPage() {
         dashboardPage = new DashboardPage(driver);
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {}
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(15));
+        wait.until(d -> d.getCurrentUrl().contains("beranda") || 
+                       d.getCurrentUrl().contains("home") || 
+                       d.getCurrentUrl().contains("dashboard"));
+
         String currentUrl = driver.getCurrentUrl();
-        System.out.println("Current URL setelah login: " + currentUrl);
-        Assertions.assertTrue(currentUrl.contains("beranda") || currentUrl.contains("home") || currentUrl.contains("dashboard"),
-                "URL tidak mengandung indikasi dashboard: " + currentUrl);
-        driver.quit();
+        System.out.println("Login Selesai. Posisi di URL Dashboard: " + currentUrl);
+        
+        Assertions.assertTrue(
+            currentUrl.contains("beranda") || currentUrl.contains("home") || currentUrl.contains("dashboard"),
+            "Gagal login, URL bukan dashboard: " + currentUrl
+        );
     }
 }

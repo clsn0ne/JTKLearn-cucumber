@@ -1,4 +1,18 @@
 -------------------------------------------------------------------------------
 Test set: com.jtklearn.runners.TestRunner
 -------------------------------------------------------------------------------
-Tests run: 3, Failures: 0, Errors: 0, Skipped: 2, Time elapsed: 10.15 s -- in com.jtklearn.runners.TestRunner
+Tests run: 3, Failures: 0, Errors: 1, Skipped: 2, Time elapsed: 23.40 s <<< FAILURE! -- in com.jtklearn.runners.TestRunner
+com.jtklearn.runners.TestRunner.Quizzez - Verifikasi sistem ketika pelajar submit kuis dengan ada soal yang tidak dijawab -- Time elapsed: 23.10 s <<< ERROR!
+org.openqa.selenium.TimeoutException: 
+Expected condition failed: waiting for presence of any elements located by By.cssSelector: input.input-quiz-radio[type='radio'] (tried for 15 second(s) with 500 milliseconds interval)
+Build info: version: '4.32.0', revision: 'd17c8aa950'
+System info: os.name: 'Windows 11', os.arch: 'amd64', os.version: '10.0', java.version: '26.0.1'
+Driver info: org.openqa.selenium.chrome.ChromeDriver
+Capabilities {acceptInsecureCerts: false, browserName: chrome, browserVersion: 149.0.7827.104, chrome: {chromedriverVersion: 149.0.7827.115 (daf70f9ddee..., userDataDir: C:\Users\CARISS~1\AppData\L...}, fedcm:accounts: true, goog:chromeOptions: {debuggerAddress: localhost:50772}, goog:processID: 9948, networkConnectionEnabled: false, pageLoadStrategy: normal, platformName: windows, proxy: Proxy(), se:cdp: ws://localhost:50772/devtoo..., se:cdpVersion: 149.0.7827.104, setWindowRect: true, strictFileInteractability: false, timeouts: {implicit: 0, pageLoad: 300000, script: 30000}, unhandledPromptBehavior: dismiss and notify, webauthn:extension:credBlob: true, webauthn:extension:largeBlob: true, webauthn:extension:minPinLength: true, webauthn:extension:prf: true, webauthn:virtualAuthenticators: true}
+Session ID: 90d9bb9d44a2cf5686c2c7f22054327a
+	at org.openqa.selenium.support.ui.WebDriverWait.timeoutException(WebDriverWait.java:84)
+	at org.openqa.selenium.support.ui.FluentWait.until(FluentWait.java:228)
+	at com.jtklearn.pages.QuizPage.clickStartQuizButton(QuizPage.java:81)
+	at com.jtklearn.stepdefinitions.QuizSteps.openQuizSession(QuizSteps.java:58)
+	at ✽.Pelajar membuka sesi kuis "Kuis Donuts"(classpath:features/quiz.feature:7)
+

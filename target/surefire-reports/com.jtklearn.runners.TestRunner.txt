@@ -1,4 +1,0 @@
--------------------------------------------------------------------------------
-Test set: com.jtklearn.runners.TestRunner
--------------------------------------------------------------------------------
-Tests run: 3, Failures: 0, Errors: 0, Skipped: 2, Time elapsed: 10.15 s -- in com.jtklearn.runners.TestRunner

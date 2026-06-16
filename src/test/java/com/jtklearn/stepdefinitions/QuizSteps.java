@@ -23,11 +23,12 @@ public class QuizSteps {
     CoursePage coursePage;
     QuizPage quizPage;
 
+    // ===== TC11 (PILIHAN GANDA) & TC12 (ESSAY) =====
+    // PERBAIKAN: Teks disamakan persis dengan yang tertulis di file quiz.feature
     @Given("Pelajar sudah login dan enroll course Bakery With Me! Resep Hayday🥐🍲")
     public void pelajar_sudah_login_dan_enroll_course_bakery_with_me_resep_hayday() {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
         
-        // Login
         driver.get("https://polban-space.cloudias79.com/jtk-learn/");
         loginPage = new LoginPage(driver);
         loginPage.enterEmail("ratna@example.com");
@@ -40,20 +41,16 @@ public class QuizSteps {
                        d.getCurrentUrl().contains("dashboard"));
         System.out.println("Login berhasil. URL: " + driver.getCurrentUrl());
 
-        // Buka course ID 54 (Bakery With Me!)
         driver.get("https://polban-space.cloudias79.com/jtk-learn/course/54");
         wait.until(ExpectedConditions.urlContains("/course/54"));
         System.out.println("Halaman course 54 terbuka.");
 
-        // Klik "Lanjutkan Kursus"
         coursePage = new CoursePage(driver);
         coursePage.clickContinueCourse();
 
-        // Tunggu hingga masuk ke halaman belajar
         wait.until(ExpectedConditions.urlContains("/learn-course/54"));
         System.out.println("Berada di halaman belajar course: " + driver.getCurrentUrl());
 
-        // Tunggu sidebar muncul
         wait.until(ExpectedConditions.presenceOfElementLocated(By.id("sidebarMenu")));
         System.out.println("Sidebar siap.");
     }
@@ -61,20 +58,34 @@ public class QuizSteps {
     @When("Pelajar membuka sesi kuis {string}")
     public void openQuizSession(String sesiName) {
         quizPage = new QuizPage(driver);
-        // Pastikan URL benar
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
+        
+        // 1. Amankan transisi URL: Pastikan browser sudah benar-benar stabil berada di halaman belajar
         if (!driver.getCurrentUrl().contains("/learn-course/54")) {
             driver.get("https://polban-space.cloudias79.com/jtk-learn/learn-course/54");
-            new WebDriverWait(driver, Duration.ofSeconds(10))
-                .until(ExpectedConditions.urlContains("/learn-course/54"));
         }
-        // 1. Klik item sidebar sesuai nama kuis
+        wait.until(ExpectedConditions.urlContains("/learn-course/54"));
+        
+        // 2. Beri jeda napas 2 detik agar state React & Sidebar selesai me-render komponen secara utuh
+        try { 
+            Thread.sleep(2000); 
+        } catch (InterruptedException ignored) {}
+
+        // 3. Eksekusi pembukaan kuis dari sidebar
         quizPage.openQuizFromSidebar(sesiName);
-        // 2. Klik tombol "Mulai Kuis" pada halaman panduan
+        
+        // 4. Beri jeda napas 1 detik sebelum memicu paksa klik tombol mulai
+        try { 
+            Thread.sleep(1000); 
+        } catch (InterruptedException ignored) {}
+        
         quizPage.clickStartQuizButton();
-        // 3. Tunggu hingga halaman soal muncul (radio button)
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(15));
-        wait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("input[type='radio']")));
-        System.out.println("Kuis siap dikerjakan.");
+        
+        // 5. Tunggu lembar input soal dimuat di layar
+        System.out.println("⏳ Menunggu halaman soal di-render oleh React...");
+        wait.until(ExpectedConditions.presenceOfElementLocated(By.tagName("input")));
+        
+        System.out.println("Kuis siap dikerjakan. Halaman soal berhasil dimuat.");
     }
 
     @And("Memilih satu opsi jawaban")
@@ -91,7 +102,20 @@ public class QuizSteps {
     public void verifyResultDisplayed() {
         Assertions.assertTrue(quizPage.isResultDisplayed(), "Hasil kuis tidak ditampilkan.");
         System.out.println("Hasil kuis tampil. Test berhasil.");
-        // Jangan tutup driver di sini jika masih ada skenario lain
-        // driver.quit();
+    }
+
+    // ===== TC12 (ESSAY) =====
+    @And("Pelajar mengisi jawaban {string} pada kolom essay")
+    public void pelajar_mengisi_jawaban_pada_kolom_essay(String answer) {
+        quizPage.fillAllEssayAnswers();
+    }
+
+    @Then("Sistem menampilkan hasil kuis dengan nilai yang sesuai")
+    public void sistem_menampilkan_hasil_kuis_dengan_nilai_yang_sesuai() {
+        Assertions.assertTrue(quizPage.isResultDisplayed(), "Hasil kuis tidak ditampilkan.");
+        String score = quizPage.getQuizScore();
+        System.out.println("Nilai yang didapat: " + score);
+        Assertions.assertTrue(!score.isEmpty() && !score.equals("0"), 
+            "Nilai tidak valid atau kosong: " + score);
     }
 }

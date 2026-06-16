@@ -39,6 +39,5 @@ public class LoginSteps {
         System.out.println("Current URL setelah login: " + currentUrl);
         Assertions.assertTrue(currentUrl.contains("beranda") || currentUrl.contains("home") || currentUrl.contains("dashboard"),
                 "URL tidak mengandung indikasi dashboard: " + currentUrl);
-        driver.quit();
     }
 }

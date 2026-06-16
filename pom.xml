@@ -99,11 +99,9 @@
                 <version>3.5.4</version>
                 <configuration>
                     <properties>
-                        <!-- Work around. Surefire does not include enough
-                             information to disambiguate between different
-                             examples and scenarios. -->
                         <configurationParameters>
                             cucumber.junit-platform.naming-strategy=long
+                            cucumber.plugin=html:target/cucumber-reports/cucumber.html,json:target/cucumber-reports/cucumber.json
                         </configurationParameters>
                     </properties>
                 </configuration>

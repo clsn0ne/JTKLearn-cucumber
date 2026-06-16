@@ -26,7 +26,7 @@ public class QuizSteps {
     @Given("Pelajar sudah login dan enroll course Bakery With Me! Resep Hayday🥐🍲")
     public void pelajar_sudah_login_dan_enroll_course_bakery_with_me_resep_hayday() {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
-        
+
         // Login
         driver.get("https://polban-space.cloudias79.com/jtk-learn/");
         loginPage = new LoginPage(driver);
@@ -71,9 +71,7 @@ public class QuizSteps {
         quizPage.openQuizFromSidebar(sesiName);
         // 2. Klik tombol "Mulai Kuis" pada halaman panduan
         quizPage.clickStartQuizButton();
-        // 3. Tunggu hingga halaman soal muncul (radio button)
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(15));
-        wait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("input[type='radio']")));
+        // 3. (Tidak perlu tambahan wait karena sudah ditangani di dalam clickStartQuizButton)
         System.out.println("Kuis siap dikerjakan.");
     }
 

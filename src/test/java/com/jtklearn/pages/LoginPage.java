@@ -6,7 +6,6 @@ import org.openqa.selenium.WebElement;
 
 public class LoginPage extends BasePage {
     
-    // Multiple selector strategies for robustness
     private final By[] emailSelectors = {
         By.cssSelector("input[placeholder='Masukkan email']"),
         By.cssSelector("input[placeholder*='email' i]"),
@@ -57,9 +56,6 @@ public class LoginPage extends BasePage {
         System.out.println("Tombol login diklik");
     }
     
-    /**
-     * Try multiple selectors until one works
-     */
     private WebElement findElementWithFallback(By[] selectors, String elementName) {
         Exception lastException = null;
         
@@ -77,7 +73,6 @@ public class LoginPage extends BasePage {
             }
         }
         
-        // If all selectors failed
         System.err.println("SEMUA SELECTOR GAGAL untuk " + elementName);
         throw new RuntimeException("Tidak dapat menemukan " + elementName + " dengan semua selector yang tersedia", lastException);
     }

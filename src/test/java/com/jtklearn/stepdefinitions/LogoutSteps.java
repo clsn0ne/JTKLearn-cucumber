@@ -41,7 +41,6 @@ public class LogoutSteps {
 
     @Given("Pengguna berada di halaman dashboard")
     public void penggunaDiDashboard() {
-        // ensure dashboardPage is initialized and URL contains dashboard/home/beranda
         try { Thread.sleep(1000); } catch (InterruptedException e) {}
         String currentUrl = driver.getCurrentUrl();
         if (!(currentUrl.contains("beranda") || currentUrl.contains("home") || currentUrl.contains("dashboard"))) {

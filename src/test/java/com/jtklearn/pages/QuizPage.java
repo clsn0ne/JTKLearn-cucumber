@@ -46,7 +46,7 @@ public class QuizPage extends BasePage {
     public void openQuizFromSidebar(String quizName) {
         WebDriverWait longWait = new WebDriverWait(driver, Duration.ofSeconds(20));
         longWait.until(ExpectedConditions.presenceOfElementLocated(learnListItems));
-        
+
         List<WebElement> items = driver.findElements(learnListItems);
         WebElement targetItem = null;
         for (WebElement item : items) {
@@ -72,14 +72,8 @@ public class QuizPage extends BasePage {
     public void clickStartQuizButton() {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(15));
 
-        // Tunggu tombol Mulai Kuis bisa diklik
-        WebElement startBtn = wait.until(
-            ExpectedConditions.elementToBeClickable(startQuizButton)
-        );
-        scrollToElement(startBtn);
-
-        // Klik via JS untuk menghindari intercept
-        ((JavascriptExecutor) driver).executeScript("arguments[0].click();", startBtn);
+        // Tunggu tombol siap diklik dan klik langsung (tanpa menyimpan referensi)
+        wait.until(ExpectedConditions.elementToBeClickable(startQuizButton)).click();
         System.out.println("Tombol 'Mulai Kuis' diklik.");
 
         // Tunggu quiz-container muncul (halaman soal tampil)
@@ -91,37 +85,39 @@ public class QuizPage extends BasePage {
         System.out.println("Radio button soal sudah tersedia.");
     }
 
-    // Pilih jawaban untuk SEMUA soal (satu per satu)
+    // Pilih jawaban untuk SEMUA soal (satu per satu) — dengan penanganan stale element
     public void selectAllAnswers() {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-        
+
         // Ambil semua question-box
         List<WebElement> questionBoxes = wait.until(
             ExpectedConditions.presenceOfAllElementsLocatedBy(
                 By.cssSelector("div.question-box")
             )
         );
-        
+
         System.out.println("Jumlah soal ditemukan: " + questionBoxes.size());
-        
+
         for (int i = 0; i < questionBoxes.size(); i++) {
-            WebElement box = questionBoxes.get(i);
-            
+            // Ambil ulang box setiap iterasi untuk menghindari stale
+            WebElement box = driver.findElements(By.cssSelector("div.question-box")).get(i);
+
             // Cari radio button pertama di dalam question-box ini
             List<WebElement> radios = box.findElements(
                 By.cssSelector("input.input-quiz-radio[type='radio']")
             );
-            
+
             if (radios.isEmpty()) {
                 System.out.println("Soal ke-" + (i+1) + ": tidak ada radio, skip.");
                 continue;
             }
-            
+
             WebElement firstRadio = radios.get(0);
             scrollToElement(firstRadio);
-            
+
             // Klik via label dulu, fallback JS
             String radioId = firstRadio.getDomAttribute("id");
+            boolean clicked = false;
             if (radioId != null && !radioId.isEmpty()) {
                 try {
                     WebElement label = driver.findElement(
@@ -129,33 +125,35 @@ public class QuizPage extends BasePage {
                     );
                     scrollToElement(label);
                     label.click();
+                    clicked = true;
                     System.out.println("Soal ke-" + (i+1) + ": jawaban dipilih via label.");
+                } catch (Exception e) {
+                    // fallback ke JS
+                }
+            }
+            if (!clicked) {
+                // Klik langsung radio (tanpa JS jika memungkinkan)
+                try {
+                    firstRadio.click();
                 } catch (Exception e) {
                     ((JavascriptExecutor) driver).executeScript(
                         "arguments[0].click();", firstRadio
                     );
-                    System.out.println("Soal ke-" + (i+1) + ": jawaban dipilih via JS.");
                 }
-            } else {
-                ((JavascriptExecutor) driver).executeScript(
-                    "arguments[0].click();", firstRadio
-                );
-                System.out.println("Soal ke-" + (i+1) + ": jawaban dipilih via JS (no id).");
+                System.out.println("Soal ke-" + (i+1) + ": jawaban dipilih via JS.");
             }
-            
+
             // Jeda kecil antar soal
             try { Thread.sleep(200); } catch (Exception ignored) {}
         }
-        
+
         System.out.println("Semua soal sudah dijawab.");
     }
 
-    // Klik tombol submit (KIRIM)
+    // Klik tombol submit (KIRIM) — langsung klik tanpa menyimpan referensi
     public void clickSubmit() {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-        WebElement btn = wait.until(ExpectedConditions.elementToBeClickable(submitButton));
-        scrollToElement(btn);
-        ((JavascriptExecutor) driver).executeScript("arguments[0].click();", btn);
+        wait.until(ExpectedConditions.elementToBeClickable(submitButton)).click();
         System.out.println("Tombol submit 'KIRIM' diklik.");
     }
 
